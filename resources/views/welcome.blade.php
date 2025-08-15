@@ -28,9 +28,15 @@
 
                 <livewire:products />
                 <div class="fixed bottom-8 left-8 z-50 text-white">
-                    <a href="teams">
-                        <span class="bg-blue-600 rounded-4xl p-5">Team</span>
-                        <a/>
+                    <a href="teams" class="flex items-center gap-2">
+                        <span class="bg-blue-600 rounded-4xl p-5 flex items-center gap-2">
+                            <!-- Team icon (Heroicons users-solid) -->
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25v-1.5A2.25 2.25 0 016.75 16.5h10.5a2.25 2.25 0 012.25 2.25v1.5M6.75 6.75a3.75 3.75 0 107.5 0 3.75 3.75 0 00-7.5 0z" />
+                            </svg>
+                            Team
+                        </span>
+                    </a>
                 </div>
                 <livewire:contact />
 
