@@ -15,7 +15,7 @@
         <a href="/"><h1 class="text-2xl font-bold">Kigali Web Artisans</h1></a>
     </header>
     <main class="flex-1 w-full flex flex-col items-center justify-center">
-        {{ $slot }}
+        @yield('content')
     </main>
     <footer class="w-full text-sm mt-6 py-4 px-6 bg-gray-100 text-center">
         <p>© 2023 Kigali Web Artisans. All rights reserved.</p>

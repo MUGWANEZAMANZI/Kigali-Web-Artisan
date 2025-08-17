@@ -13,3 +13,7 @@ Route::get('/teams', Team::class);
 
 
 Route::get('/mbaza-ai', Mbazaai::class);
+
+Route::get('/dorm-link-terms', function () {
+    return view('dorm-link-terms');
+});
