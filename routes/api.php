@@ -1,9 +1,10 @@
 <?php
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Prediction;
 
 
 
 
-Route::get('/prompts', function () {
-    return response()->json(['message' => 'Welcome to the API!']);
-});
+Route::post('/prompts', [Prediction::class, 'Authenticated'])
+    ->name('prompts.authenticated');
+
