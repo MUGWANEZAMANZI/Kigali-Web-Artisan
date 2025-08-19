@@ -1,3 +1,4 @@
+
 <div class="max-w-4xl mx-auto py-12 px-4">
     <div class="mb-10">
         <h2 class="text-4xl font-extrabold mb-3 text-center text-blue-800 tracking-tight">Our Team</h2>
@@ -26,3 +27,4 @@
         </div>
     </div>
 </div>
+

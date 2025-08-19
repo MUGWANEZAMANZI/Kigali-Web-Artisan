@@ -19,8 +19,10 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'phone',
         'email',
         'password',
+
     ];
 
     /**
@@ -45,4 +47,22 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Get the payments for the user (by phone/client).
+     */
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'client', 'phone');
+    }
+
+    /**
+     * Get the user's current subscription.
+     */
+    public function subscription()
+    {
+        return $this->hasOne(Subscription::class);
+    }
+
+
 }

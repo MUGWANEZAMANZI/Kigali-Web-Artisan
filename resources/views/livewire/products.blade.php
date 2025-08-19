@@ -23,7 +23,7 @@
 
     <!-- Product Card: Site Pay -->
     <div class="flex flex-col w-72 bg-amber-900 rounded-3xl shadow-lg p-6 hover:scale-105 transition-transform duration-300">
-    <img src="products/site_pay.jpg" alt="Site Pay" class="rounded-xl mb-4 mx-auto" style="width:180px; height:180px; object-fit:cover;" />
+    <img src="products/site_pay.png" alt="Site Pay" class="rounded-xl mb-4 mx-auto" style="width:180px; height:180px; object-fit:cover;" />
         <h1 class="text-xl font-bold mb-2 text-white">Site Pay</h1>
         <h2 class="text-amber-100 mb-4">The Site Pay enables construction site management, from all HR stuffs to secure payments.</h2>
         <a href="#" class="mt-auto text-blue-200 font-semibold hover:underline">Draft build available</a>

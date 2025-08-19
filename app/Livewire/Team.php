@@ -13,6 +13,8 @@ class Team extends Component
 
     public function layout()
     {
-        return 'components.layouts.app';
+        return view('components.layout');
     }
+
+   
 }
