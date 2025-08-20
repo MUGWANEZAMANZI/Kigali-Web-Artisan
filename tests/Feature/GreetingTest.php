@@ -46,7 +46,6 @@ class GreetingTest extends TestCase
         $persister = new Filesystem(storage_path('app/greeting_model.rbx'), true);
         $model = new PersistentModel($estimator, $persister);
         $model->save();
-
         $this->assertTrue(true);
     }
 }

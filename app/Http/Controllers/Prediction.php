@@ -20,34 +20,31 @@ class Prediction extends Controller
 
 
     public function Authenticated(Request $request): JsonResponse
-{
-    $user = auth()->user();
-    if ($user) {
-        $subscription = $user->subscription;
-    } else {
-        // Try to find user by phone if not authenticated
-        $phone = $request->get('phone');
-        $user = $phone ? User::where('phone', $phone)->first() : null;
-        $subscription = $user ? $user->subscription : null;
+    {
+        $user = auth()->user();
+        if ($user) {
+            $subscription = $user->subscription;
+            // Authenticated users are not limited by IP
+            if (!$subscription || now()->lt($subscription->start_date) || now()->gt($subscription->end_date)) {
+                return response()->json(['message' => 'Subscription expired or not found'], 403);
+            }
+
+            return $this->index($request);
+        } else {
+            // Unauthenticated: limit by IP
+            $userIp = $request->ip();
+            $date = now()->toDateString();
+            $key = "prompts_{$userIp}_{$date}";
+            $count = cache()->get($key, 0);
+
+            if ($count >= 10) {
+                return response()->json(['message' => 'Prompt limit reached for today'], 429);
+            }
+
+            cache()->put($key, $count + 1, now()->addDay()->startOfDay());
+            return $this->index($request);
+        }
     }
-
-    // Check subscription validity
-    if (!$subscription || now()->lt($subscription->start_date) || now()->gt($subscription->end_date)) {
-        return response()->json(['message' => 'Subscription expired or not found'], 403);
-    }
-
-    $userIp = $request->ip();
-    $date = now()->toDateString();
-    $key = "prompts_{$userIp}_{$date}";
-    $count = cache()->get($key, 0);
-
-    if ($count >= 10) {
-        return response()->json(['message' => 'Prompt limit reached for today'], 429);
-    }
-
-    cache()->put($key, $count + 1, now()->addDay()->startOfDay());
-    return response()->json(['message' => 'Allowed', 'prompts_used' => $count + 1], 200);
-}
 
     public function index(Request $request): JsonResponse
     {
@@ -60,7 +57,7 @@ class Prediction extends Controller
         }
 
         $greeting = $request->input('greeting');
-        $prediction = $this->greetingService->predictResponse($greeting);
+        $prediction = $this->greetingService->predict($greeting);
 
         return response()->json([
             'greeting' => $greeting,
