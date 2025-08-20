@@ -48,19 +48,20 @@ class Prediction extends Controller
 
     public function index(Request $request): JsonResponse
     {
+        \Log::info('User prompt received', ['prompt' => $request->input('prompt')]);
         $validator = Validator::make($request->all(), [
-            'greeting' => 'required|string|max:255'
+            'prompt' => 'required|string|max:255'
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $greeting = $request->input('greeting');
-        $prediction = $this->greetingService->predict($greeting);
+        $prompt = $request->input('prompt');
+        $prediction = $this->greetingService->predict($prompt);
 
         return response()->json([
-            'greeting' => $greeting,
+            'prompt' => $prompt,
             'response' => $prediction
         ]);
     }

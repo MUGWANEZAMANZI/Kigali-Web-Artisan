@@ -9,33 +9,24 @@ use Rubix\ML\Datasets\Unlabeled;
 
 class PredictTest extends TestCase
 {
-    public function test_kinyarwanda_greeting_prediction(): void
+    public function test_prompt_classifier_and_routing(): void
     {
-        $persister = new Filesystem(storage_path('app/greeting_model.rbx'));
+        $persister = new Filesystem(storage_path('app/prompt_classifier.rbx'));
         $model = PersistentModel::load($persister);
 
-        // Acceptable responses for 'Mwaramutse'
-        $possibleResponses = [
-            'Mwaramutse neza, amakuru yawe?',
-            'Wiriwe neza, tugire umunsi mwiza.',
-            // Add other possible close responses if needed
-        ];
+    // Test greeting
+    $greeting = 'Mwaramutse'; 
+    $category = $model->predict(\Rubix\ML\Datasets\Unlabeled::build([$greeting]))[0];
+    $this->assertEquals('greeting', $category);
 
-        $greeting = 'Mwaramutse';
-        $sample = [[crc32($greeting)]];
-        $prediction = $model->predict(Unlabeled::build($sample));
-        $this->assertContains($prediction[0], $possibleResponses);
+    // Test legal question (using a description from dataset)
+    $legalQuestion = 'Forced sexual intercourse or penetration by force, threats, trickery, authority, or victim\'s vulnerability.';
+    $legalCategory = $model->predict(\Rubix\ML\Datasets\Unlabeled::build([$legalQuestion]))[0];
+    $this->assertEquals('legal_question', $legalCategory);
 
-        // Test 2: Known follow-up as greeting
-        $followupGreeting = 'Ndishimye ko umeze neza, mbwira icyo ngufasha mu mategeko cg urubanza witegura.';
-        $followupSample = [[crc32($followupGreeting)]];
-        $followupPrediction = $model->predict(Unlabeled::build($followupSample));
-        $this->assertNotEmpty($followupPrediction[0]);
-
-        // Test 3: Unknown greeting
-        $unknownGreeting = 'Muraho neza';
-        $unknownSample = [[crc32($unknownGreeting)]];
-        $unknownPrediction = $model->predict(Unlabeled::build($unknownSample));
-        $this->assertNotEmpty($unknownPrediction[0]);
+    // Test article (using an offence name from dataset)
+    $articlePrompt = 'Sexual offence: Child Defilement';
+    $articleCategory = $model->predict(\Rubix\ML\Datasets\Unlabeled::build([$articlePrompt]))[0];
+    $this->assertEquals('article', $articleCategory);
     }
 }
