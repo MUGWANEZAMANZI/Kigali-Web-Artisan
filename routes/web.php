@@ -17,3 +17,7 @@ Route::get('/mbaza-ai', Mbazaai::class);
 Route::get('/dorm-link-terms', function () {
     return view('dorm-link-terms');
 });
+
+Route::get('/mbazaai-terms', function () {
+    return view('mbazaai-terms');
+});
