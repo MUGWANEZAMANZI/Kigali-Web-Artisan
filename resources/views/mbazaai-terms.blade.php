@@ -7,9 +7,7 @@
         </div>
         <h1 class="text-3xl font-bold mb-6 text-gray-800">Mbaza AI Terms of Use & Privacy Policy</h1>
         <p class="mb-6 text-gray-700">
-            Welcome to Mbaza AI, a service by Kigali Web Artisans designed to assist Rwandans with information and digital services. By using Mbaza AI, you agree to these terms, which are governed by Rwandan law, including the Official Gazette and Law No. 058/2021 of 13/10/2021 on the Protection of Personal Data and Privacy.
-        </p>
-
+            Welcome to Mbaza AI, a service by Kigali Web Artisans designed to assist Rwandans with information and digital services.
         <h2 class="text-2xl font-semibold mt-8 mb-3 text-gray-800">1. Acceptance of Terms</h2>
         <p class="mb-6 text-gray-700">
             By accessing or using Mbaza AI, you agree to comply with these terms. If you do not agree, please do not use the service.
@@ -18,14 +16,14 @@
         <h2 class="text-2xl font-semibold mt-8 mb-3 text-gray-800">2. Service Description</h2>
         <p class="mb-6 text-gray-700">
             Mbaza AI provides information, guidance, and digital assistance to Rwandan users. The service is intended for lawful use only and should not be relied upon for legal, medical, or emergency advice.
+            I collect data from offfical Gazette publication, and use amategekoyacu.com website as a national commision for law ammendement in Rwanda. We collect these informations, pre-process it and train Mbaza AI model. 
         </p>
 
         <h2 class="text-2xl font-semibold mt-8 mb-3 text-gray-800">3. User Data & Privacy</h2>
         <ul class="list-disc list-inside mb-6 text-gray-700 space-y-2">
             <li>Mbaza AI collects minimal personal data necessary to provide and improve the service, in accordance with Rwandan data protection law.</li>
-            <li>Your data is processed securely and is not shared with third parties without your consent, except as required by law.</li>
+            <li>Your data is processed securely and is not shared with third parties without your consent.</li>
             <li>You have the right to access, correct, or request deletion of your personal data. To exercise these rights, email <a href="mailto:mmaudace@gmail.com" class="text-blue-600 underline">mmaudace@gmail.com</a>.</li>
-            <li>All data processing complies with Law No. 058/2021 and relevant regulations published in the Official Gazette.</li>
         </ul>
 
         <h2 class="text-2xl font-semibold mt-8 mb-3 text-gray-800">4. User Responsibilities</h2>

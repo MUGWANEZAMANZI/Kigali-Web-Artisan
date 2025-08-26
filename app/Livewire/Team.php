@@ -10,11 +10,5 @@ class Team extends Component
     {
         return view('livewire.team');
     }
-
-    public function layout()
-    {
-        return view('components.layout');
-    }
-
    
 }

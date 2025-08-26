@@ -7,7 +7,7 @@ use App\Models\Payment;
 use Paypack\Paypack;
 use Illuminate\Http\JsonResponse;
 
-class PaymentController extends Controller
+class Payment extends Controller
 {
     public function index(Request $request) : JsonResponse
     {
