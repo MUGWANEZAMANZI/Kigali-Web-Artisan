@@ -10,7 +10,7 @@
     <img src="products/mbaza_ai.png" alt="Mbaza AI" class="rounded-xl mb-4 mx-auto" style="width:180px; height:180px; object-fit:cover;" />
         <h1 class="text-xl font-bold mb-2 text-gray-800">Mbaza AI</h1>
         <h2 class="text-gray-600 mb-4">AI Assistant built using Rwandan dataset of laws.</h2>
-        <a href="/mbaza-ai" class="mt-auto text-blue-600 font-semibold hover:underline">Learn More</a>
+        <a href="https://play.google.com/apps/test/com.kigaliwebartisans.mbazaai/15" class="mt-auto text-blue-600 font-semibold hover:underline">Learn More</a>
     </div>
 
     <!-- Product Card: Dorm Link -->

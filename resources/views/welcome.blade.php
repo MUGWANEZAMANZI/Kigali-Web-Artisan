@@ -6,7 +6,6 @@
 
         <title>Kigali Web Artisans</title>
         <link rel="icon" href="{{ asset('logo/logo.jpg') }}" type="image/x-icon">
-        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
         <!-- Styles / Scripts -->
         @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
             @vite(['resources/css/app.css', 'resources/js/app.js'])

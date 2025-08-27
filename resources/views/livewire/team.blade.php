@@ -1,7 +1,3 @@
-@extends('components.layouts.app')
-
-    @section('content')
-
 <div class="max-w-4xl mx-auto py-12 px-4">
     <div class="mb-10">
         <h2 class="text-4xl font-extrabold mb-3 text-center text-blue-800 tracking-tight">Our Team</h2>
@@ -21,7 +17,7 @@
         <!-- Team Member 2 -->
         <div class="flex flex-col items-center bg-white rounded-2xl shadow-lg p-8 w-full md:w-1/2 hover:shadow-2xl transition">
             <img src="{{ asset('team/liliane.jpg') }}" alt="MNEZERO Liliane" class="w-32 h-32 rounded-full mb-4 border-4 border-blue-200 shadow">
-            <h3 class="text-2xl font-bold text-blue-700 mb-1">MNEZERO Liliane</h3>
+            <h3 class="text-2xl font-bold text-blue-700 mb-1">MUNEZERO Liliane</h3>
             <p class="text-gray-500 mb-2">Marketing Executive</p>
             <div class="flex flex-col items-center text-gray-700 text-sm mb-2">
                 <span class="flex items-center gap-1"><svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5h2l.4 2M7 13h10l4-8H5.4M7 13l-1.35 2.7A2 2 0 0 0 7.48 19h9.04a2 2 0 0 0 1.83-2.3L17 13M7 13V6a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v7"/></svg>250788706386</span>
@@ -30,5 +26,3 @@
         </div>
     </div>
 </div>
-
-@endsection
