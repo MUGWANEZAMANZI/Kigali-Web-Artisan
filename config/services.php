@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Third Party Services
@@ -35,4 +34,8 @@ return [
         ],
     ],
 
+    'paypack' => [
+        'client_id' => env('PAYPACK_CLIENT_ID'),
+        'client_secret' => env('PAYPACK_CLIENT_SECRET'),
+    ],
 ];

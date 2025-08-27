@@ -84,8 +84,20 @@ class Authenthication extends Controller
         if (!$user) {
             return response()->json(['message' => 'Unauthenticated'], 401);
         }
+        $subscription = $user->subscription;
+        $now = now();
+        if (!$subscription || $now->lt($subscription->start_date) || $now->gt($subscription->end_date)) {
+            return response()->json([
+                'user' => $user,
+                'subscription' => 'No active subscription',
+            ]);
+        }
         return response()->json([
             'user' => $user,
+            'subscription' => [
+                'start_date' => $subscription->start_date,
+                'end_date' => $subscription->end_date,
+            ],
         ]);
     }
 

@@ -8,6 +8,7 @@ use App\Models\Subscription;
 use App\Models\User;
 use App\Services\GreetingService;
 use Illuminate\Support\Facades\Validator;
+use App\Models\UserPrompt;
 
 class Prediction extends Controller
 {
@@ -37,8 +38,8 @@ class Prediction extends Controller
             $key = "prompts_{$userIp}_{$date}";
             $count = cache()->get($key, 0);
 
-            if ($count >= 1) {
-                return response()->json(['message' => 'limit reached'], 429);
+            if ($count >= 2) {
+                return response()->json(['message' => 'amabaza y\'ubuntu zashize, uzagaruke ejo'], 429);
             }
 
             cache()->put($key, $count + 1, now()->addDay()->startOfDay());
@@ -65,4 +66,56 @@ class Prediction extends Controller
             'response' => $prediction
         ]);
     }
+
+    /**
+     * Store a new prompt and response for the authenticated user.
+     */
+    public function store(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        if (!$user) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
+
+        $request->validate([
+            'prompt' => 'required|string|max:255',
+            'response' => 'required|string',
+        ]);
+
+        \Log::info('storing prompts', ['user_id' => $user->id, 'prompt' => $request->input('prompt')]);
+
+        // Determine subscription type
+        $subscription = $user->subscription;
+        $now = now();
+        $subscriptionType = (!$subscription || $now->lt($subscription->start_date) || $now->gt($subscription->end_date)) ? 'free' : 'subscribed';
+
+        // Store the prompt and response
+        $userPrompt = UserPrompt::create([
+            'user_id' => $user->id,
+            'prompt' => $request->input('prompt'),
+            'response' => $request->input('response'),
+            'subscription_type' => $subscriptionType,
+        ]);
+
+        return response()->json([
+            'message' => 'Prompt stored',
+            'data' => $userPrompt,
+        ], 201);
+    }
+
+    public function allPrompts(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        if (!$user) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
+
+        $prompts = UserPrompt::where('user_id', $user->id)->get();
+
+        return response()->json([
+            'prompts' => $prompts,
+        ]);
+    }
+
+
 }
