@@ -37,8 +37,8 @@ class Prediction extends Controller
             $key = "prompts_{$userIp}_{$date}";
             $count = cache()->get($key, 0);
 
-            if ($count >= 10) {
-                return response()->json(['message' => 'Prompt limit reached for today'], 429);
+            if ($count >= 1) {
+                return response()->json(['message' => 'limit reached'], 429);
             }
 
             cache()->put($key, $count + 1, now()->addDay()->startOfDay());
