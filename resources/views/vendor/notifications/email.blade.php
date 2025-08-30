@@ -47,12 +47,10 @@
 @isset($actionText)
 <x-slot:subcopy>
 @lang(
-"Niba ugize ikibazo ukanda kuri buto ya \":actionText\", kopia ushyire iyi URL hasi\n".
-'uyishyire muri brawuza yawe:',
-[    [
-        'actionText' => $actionText,
-    ]
-) <span class="break-all">[{{ $displayableActionUrl }}]({{ $actionUrl }})</span>
+    "Niba ugize ikibazo ukanda kuri buto ya \" :actionText \" , kopia ushyire iyi URL hasi\nuyishyire muri brawuza yawe:",
+    ['actionText' => $actionText]
+)
+<span class="break-all">[{{ $displayableActionUrl }}]({{ $actionUrl }})</span>
 </x-slot:subcopy>
 @endisset
 </x-mail::message>
