@@ -6,6 +6,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Password;
 
 class Authenthication extends Controller
 {
@@ -108,5 +109,18 @@ class Authenthication extends Controller
             $user->currentAccessToken()?->delete();
         }
         return response()->json(['message' => 'Logged out successfully']);
+    }
+
+    public function forgotPassword(Request $request): JsonResponse
+    {
+        $request->validate([
+            'email' => 'required|string|email|max:255',
+        ]);
+
+        $status = Password::sendResetLink($request->only('email'));
+
+        \Log::info(["message" => $status]);
+
+        return response()->json(['message' => 'Niba imeli yawe yanditse urahabwa linki yo guhindura Ijambobanga ryawe']);
     }
 }

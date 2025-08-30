@@ -27,7 +27,7 @@ class Prediction extends Controller
             $subscription = $user->subscription;
             // Authenticated users are not limited by IP
             if (!$subscription || now()->lt($subscription->start_date) || now()->gt($subscription->end_date)) {
-                return response()->json(['message' => 'Subscription expired or not found'], 403);
+                return response()->json(['message' => 'Ntafatabuguzi ufite cg ryarangiye'], 403);
             }
 
             return $this->index($request);
@@ -39,7 +39,7 @@ class Prediction extends Controller
             $count = cache()->get($key, 0);
 
             if ($count >= 2) {
-                return response()->json(['message' => 'amabaza y\'ubuntu zashize, uzagaruke ejo'], 429);
+                return response()->json(['message' => 'amabaza y\'ubuntu yashize, uzagaruke ejo'], 429);
             }
 
             cache()->put($key, $count + 1, now()->addDay()->startOfDay());

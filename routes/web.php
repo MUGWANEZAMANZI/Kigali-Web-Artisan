@@ -21,3 +21,7 @@ Route::get('/dorm-link-terms', function () {
 Route::get('/mbazaai-terms', function () {
     return view('mbazaai-terms');
 });
+
+Route::get('reset-password/{token}', function ($token) {
+    return view('auth.reset-password', ['token' => $token]);
+})->middleware(['guest'])->name('password.reset');

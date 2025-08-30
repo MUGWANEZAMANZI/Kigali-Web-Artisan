@@ -132,4 +132,53 @@ class GreetingTest extends TestCase
 
         $this->assertTrue(true);
     }
+
+    public function test_greeting_response_training_and_saving(): void
+    {
+        $greetingsPath = public_path('kinyarwanda_greetings.csv');
+        $samples = [];
+        $labels = [];
+
+        if (file_exists($greetingsPath)) {
+            $file = fopen($greetingsPath, 'r');
+            $header = fgetcsv($file);
+            $colCount = count($header);
+            // Find greeting/response columns by language
+            $greetingCols = [];
+            $responseCols = [];
+            foreach ($header as $i => $col) {
+                if (str_starts_with($col, 'greeting')) { $greetingCols[] = $i; }
+                if (str_starts_with($col, 'response')) { $responseCols[] = $i; }
+            }
+            while (($row = fgetcsv($file)) !== false) {
+                $row = array_pad($row, $colCount, '');
+                $row = array_slice($row, 0, $colCount);
+                // For each language, pair greeting with its response
+                foreach ($greetingCols as $idx => $greetIdx) {
+                    $greeting = trim($row[$greetIdx] ?? '');
+                    $response = trim($row[$responseCols[$idx] ?? -1] ?? '');
+                    if ($greeting && $response) {
+                        $samples[] = $greeting;
+                        $labels[] = $response;
+                    }
+                }
+            }
+            fclose($file);
+        }
+
+        // Train greeting response model using pipeline (vectorizer + classifier)
+        if (count($samples) > 0 && count($labels) > 0) {
+            $dataset = new Labeled($samples, $labels);
+            $pipeline = new Pipeline([
+                new TextNormalizer(),
+                new StopWordFilter(),
+                new WordCountVectorizer(10000),
+            ], new KNearestNeighbors(3));
+            $model = new PersistentModel($pipeline, new Filesystem(storage_path('app/greeting_response.rbx'), true));
+            $model->train($dataset);
+            $model->save();
+        }
+
+        $this->assertTrue(true);
+    }
 }
