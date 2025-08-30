@@ -107,9 +107,9 @@ class GreetingService
             $category = $bestRow[2] ?? '';
             $description = $bestRow[3] ?? '';
             $punishment = $bestRow[4] ?? '';
-            return "Legal Question Match:\nOffence: $offence\nArticle: $article\nCategory: $category\nDescription: $description\nPunishment: $punishment";
+            return "Icyo amategeko avuga:\nIcyaha: $offence\nIngingo: $article\nKategori: $category\nUbusobanuro: $description\nIgihano: $punishment";
         }
-        return 'Sorry, I could not find a relevant legal answer.';
+        return 'Ihangane, ntabwo mbonye icyo amategeko abivugaho.';
     }
 
     public function summarizeArticle(string $prompt): string
@@ -142,8 +142,8 @@ class GreetingService
             $category = $bestRow[2] ?? '';
             $description = $bestRow[3] ?? '';
             $punishment = $bestRow[4] ?? '';
-            return "Article Summary:\nOffence: $offence\nArticle: $article\nCategory: $category\nDescription: $description\nPunishment: $punishment";
+            return "Inshamake:\nIcyaha: $offence\nIngingo: $article\nKategori: $category\nUbusobanuro: $description\nIgihano: $punishment";
         }
-        return 'Sorry, I could not find a relevant article.';
+        return 'Ihangane, ntabwo mbonye ingingo ijyanye n\'icyo wabajije.';
     }
 }
