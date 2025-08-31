@@ -25,3 +25,7 @@ Route::get('/mbazaai-terms', function () {
 Route::get('reset-password/{token}', function ($token) {
     return view('auth.reset-password', ['token' => $token]);
 })->middleware(['guest'])->name('password.reset');
+
+Route::get('/careers', function () {
+    return view('careers');
+});
