@@ -21,26 +21,30 @@ RUN apt-get update \
 # Install PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd zip
 
-# Install Composer
+# Install Composer (copy from official composer image)
 COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
 
 # Set working directory
 WORKDIR /var/www
 
-# Copy project files
+# Copy project files into container
 COPY . /var/www
 
-# Set permissions
+# Pull Git LFS files (important for prmpt_classifier.rbx)
+RUN git lfs pull \
+    && ls -lh prmpt_classifier.rbx || true
+
+# Set permissions for Laravel storage and cache
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www/storage /var/www/bootstrap/cache
 
-# Install dependencies
+# Install PHP & Node dependencies, then build frontend
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader \
-    && npm install && npm run build
+    && npm install \
+    && npm run build
 
 # Expose port 8080 for Railway
 EXPOSE 8080
 
 # Start Laravel server
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
-
