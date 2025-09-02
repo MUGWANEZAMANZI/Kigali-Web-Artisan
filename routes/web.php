@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Team;
 use App\Livewire\Mbazaai;
+use App\Http\Controllers\PasswordUpdateController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -22,9 +23,8 @@ Route::get('/mbazaai-terms', function () {
     return view('mbazaai-terms');
 });
 
-Route::get('reset-password/{token}', function ($token) {
-    return view('auth.reset-password', ['token' => $token]);
-})->middleware(['guest'])->name('password.reset');
+Route::get('/reset-password/{token}', [PasswordUpdateController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [PasswordUpdateController::class, 'update'])->name('password.update');
 
 Route::get('/careers', function () {
     return view('careers');
