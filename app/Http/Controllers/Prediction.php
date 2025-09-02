@@ -38,7 +38,7 @@ class Prediction extends Controller
             $key = "prompts_{$userIp}_{$date}";
             $count = cache()->get($key, 0);
 
-            if ($count >= 2) {
+            if ($count >= 10) {
                 return response()->json(['message' => 'amabaza y\'ubuntu yashize, uzagaruke ejo'], 429);
             }
 
@@ -51,7 +51,7 @@ class Prediction extends Controller
     {
         \Log::info('User prompt received', ['prompt' => $request->input('prompt')]);
         $validator = Validator::make($request->all(), [
-            'prompt' => 'required|string|max:255'
+            'prompt' => 'required|string|max:1000'
         ]);
 
         if ($validator->fails()) {

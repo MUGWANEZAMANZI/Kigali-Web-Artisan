@@ -27,7 +27,7 @@ class GreetingTest extends TestCase
     $labels = [];
     $greetingSamples = [];
     $greetingLabels = [];
-
+    $legalRows = [];
         // Read greetings CSV (all languages: Kinyarwanda, English, French)
         if (file_exists($greetingsPath)) {
             $greetingFile = fopen($greetingsPath, 'r');
@@ -38,9 +38,9 @@ class GreetingTest extends TestCase
             $responseCols = [];
             $followupCols = [];
             foreach ($greetingHeader as $i => $col) {
-                if (str_starts_with($col, 'greeting')) { $greetingCols[] = $i; }
-                if (str_starts_with($col, 'response')) { $responseCols[] = $i; }
-                if (str_starts_with($col, 'followup')) { $followupCols[] = $i; }
+                if (str_contains($col, 'greeting')) { $greetingCols[] = $i; }
+                if (str_contains($col, 'response')) { $responseCols[] = $i; }
+                if (str_contains($col, 'followup')) { $followupCols[] = $i; }
             }
             while (($row = fgetcsv($greetingFile)) !== false) {
                 $row = array_pad($row, $greetingColCount, '');
@@ -80,7 +80,7 @@ class GreetingTest extends TestCase
             fclose($greetingFile);
         }
 
-        // Read legal CSV (Offence-Name,Article of the Law,Offence-Category,Description of Act,Punishment)
+        // Read legal CSV (Law-Name,Category,Chapter,Article-Category,Article-Number,Article-Description,Punishment,...)
         if (file_exists($legalPath)) {
             $legalFile = fopen($legalPath, 'r');
             $legalHeader = fgetcsv($legalFile);
@@ -90,16 +90,17 @@ class GreetingTest extends TestCase
                 $row = array_slice($row, 0, $legalColCount);
                 $offence = trim($row[0] ?? '');
                 $article = trim($row[1] ?? '');
-                $desc = trim($row[3] ?? '');
-                // Add as article if offence or article name exists
-                if ($offence) {
-                    $samples[] = $offence;
-                    $labels[] = 'article';
+                $desc = trim($row[5] ?? ''); // Article-Description
+                // Use all columns as label, joined by a separator
+                $rowLabel = implode('|||', $row);
+                // Add each column as a sample for matching
+                foreach ([$offence, $article, $desc] as $sample) {
+                    if ($sample) {
+                        $samples[] = $sample;
+                        $labels[] = $rowLabel;
+                    }
                 }
-                if ($desc) {
-                    $samples[] = $desc;
-                    $labels[] = 'legal_question';
-                }
+                $legalRows[] = $row;
             }
             fclose($legalFile);
         }

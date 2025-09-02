@@ -30,6 +30,11 @@ class GreetingService
     {
         $category = $this->promptModel->predict(\Rubix\ML\Datasets\Unlabeled::build([$prompt]))[0];
 
+        // If the category is a full row (contains '|||'), return it directly
+        if (str_contains($category, '|||')) {
+            return $category;
+        }
+
         if ($category === 'greeting') {
             return $this->predictGreeting($prompt, $lang, $type);
         } elseif ($category === 'legal_question') {
