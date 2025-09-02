@@ -21,6 +21,9 @@ RUN apt-get update \
 # Install PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd zip
 
+# Increase PHP memory limit to 1GB
+RUN echo "memory_limit=1024M" > /usr/local/etc/php/conf.d/memory-limit.ini
+
 # Install Composer (copy from official composer image)
 COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
 
