@@ -16,7 +16,7 @@
         <h2 class="text-2xl font-semibold mt-8 mb-3 text-gray-800">2. Service Description</h2>
         <p class="mb-6 text-gray-700">
             Mbaza AI provides information, guidance, and digital assistance to Rwandan users. The service is intended for lawful use only and should not be relied upon for legal, medical, or emergency advice.<br>
-            <strong>Legal Sources:</strong> Mbaza AI uses laws and regulations officially published by the Government of Rwanda, including those available publicly in the Official Gazette. The service downloads and processes legal texts from <a href="https://amategekoyacu.gov.rw" class="text-blue-600 underline" target="_blank">amategekoyacu.gov.rw</a>, which contains Rwandan laws, case law, and internationally signed contracts by Rwanda. These sources are used to train and update the Mbaza AI model.<br>
+            <strong>Legal Sources:</strong> Mbaza AI uses laws and regulations officially published by the Government of Rwanda, including those available publicly in the Official Gazette. The service downloads and processes legal texts from <a href="https://amategeko.gov.rw" class="text-blue-600 underline" target="_blank">amategeko.gov.rw</a>, which contains Rwandan laws, case law, and internationally signed contracts by Rwanda. These sources are used to train and update the Mbaza AI model.<br>
             I collect data from official Gazette publication, and use amategeko.gov.rw website as a national commission for law amendment in Rwanda. We collect these informations, pre-process it and train Mbaza AI model.
         </p>
 
@@ -46,7 +46,7 @@
 
         <h2 class="text-2xl font-semibold mt-8 mb-3 text-gray-800">Disclaimer</h2>
         <p class="mb-6 text-gray-700">
-            <strong>Disclaimer:</strong> Mbaza AI is an independent service and is <span class="font-semibold">not affiliated with, endorsed by, or officially connected to the Government of Rwanda</span>. We collect and process laws and regulations that are publicly available and published by the Government of Rwanda, including those on <a href="https://amategekoyacu.gov.rw" class="text-blue-600 underline" target="_blank">amategekoyacu.gov.rw</a>. All legal information provided by Mbaza AI is for informational purposes only and should not be considered as official government communication or legal advice.
+            <strong>Disclaimer:</strong> Mbaza AI is an independent service and is <span class="font-semibold">not affiliated with, endorsed by, or officially connected to the Government of Rwanda</span>. We collect and process laws and regulations that are publicly available and published by the Government of Rwanda, including those on <a href="https://amategeko.gov.rw" class="text-blue-600 underline" target="_blank">amategeko.gov.rw</a>. All legal information provided by Mbaza AI is for informational purposes only and should not be considered as official government communication or legal advice.
         </p>
 
         <p class="text-gray-700">
