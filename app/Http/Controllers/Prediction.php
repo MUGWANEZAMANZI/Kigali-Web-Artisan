@@ -26,9 +26,10 @@ class Prediction extends Controller
         if ($user) {
             $subscription = $user->subscription;
             // Authenticated users are not limited by IP
-            if (!$subscription || now()->lt($subscription->start_date) || now()->gt($subscription->end_date)) {
-                return response()->json(['message' => 'Ntafatabuguzi ufite cg ryarangiye'], 403);
-            }
+            //Commeneted for testing purposes
+            // if (!$subscription || now()->lt($subscription->start_date) || now()->gt($subscription->end_date || 1==1)) {
+            //     return response()->json(['message' => 'Ntafatabuguzi ufite cg ryarangiye'], 403);
+            // }
 
             return $this->index($request);
         } else {
@@ -38,9 +39,16 @@ class Prediction extends Controller
             $key = "prompts_{$userIp}_{$date}";
             $count = cache()->get($key, 0);
 
-            if ($count >= 10) {
-                return response()->json(['message' => 'amabaza y\'ubuntu yashize, uzagaruke ejo'], 429);
-            }
+
+            //Commented for testing purposes
+
+             if ($count >= 10) {
+                return response()->json(['message' => 'amabaza y\'ubuntu yashize, uzagaruke ejo cg ufungure konti'], 429);
+             }
+
+
+         
+                
 
             cache()->put($key, $count + 1, now()->addDay()->startOfDay());
             return $this->index($request);
