@@ -1,0 +1,38 @@
+name: Train Law Model
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  train-law-model:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+
+    - name: Install Composer dependencies
+      run: composer install --no-progress --prefer-dist --optimize-autoloader
+
+    - name: Copy .env example (if needed)
+      run: cp .env.example .env || true
+
+    - name: Generate application key (if needed)
+      run: php artisan key:generate || true
+
+    - name: Run migrations (optional, if your command needs DB)
+      run: php artisan migrate --force || true
+      env:
+        DB_CONNECTION: sqlite
+        DB_DATABASE: database/database.sqlite
+
+    - name: Run train-law-model command
+      run: php artisan app:train-law-model
+
