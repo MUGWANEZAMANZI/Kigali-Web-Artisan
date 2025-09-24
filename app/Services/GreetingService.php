@@ -2,22 +2,26 @@
 
 namespace App\Services;
 
-use Rubix\ML\Persisters\Filesystem;
-use Rubix\ML\PersistentModel;
-use Rubix\ML\Datasets\Unlabeled;
-
 class GreetingService
 {
-    protected $promptModel;
-    protected $greetingModel;
+    protected array $legalData = [];
+    protected array $keywordIndex = [];
+    protected array $greetingData = [];
 
     public function __construct()
     {
-        $promptPersister = new Filesystem(storage_path('app/prompt_classifier.rbx'));
-        $this->promptModel = PersistentModel::load($promptPersister);
-
-        $greetingPersister = new Filesystem(storage_path('app/greeting_model.rbx'));
-        $this->greetingModel = PersistentModel::load($greetingPersister);
+        $legalDataPath = storage_path('app/legal_data.json');
+        $keywordIndexPath = storage_path('app/keyword_index.json');
+        $greetingDataPath = storage_path('app/greeting_data.json');
+        if (file_exists($legalDataPath)) {
+            $this->legalData = json_decode(file_get_contents($legalDataPath), true) ?? [];
+        }
+        if (file_exists($keywordIndexPath)) {
+            $this->keywordIndex = json_decode(file_get_contents($keywordIndexPath), true) ?? [];
+        }
+        if (file_exists($greetingDataPath)) {
+            $this->greetingData = json_decode(file_get_contents($greetingDataPath), true) ?? [];
+        }
     }
 
     /**
@@ -26,43 +30,103 @@ class GreetingService
      * @param string $lang 'rw'|'en'|'fr' (default 'rw')
      * @param string $type 'greeting'|'response'|'followup' (default 'greeting')
      */
-    public function predict(string $prompt, string $lang = 'rw', string $type = 'greeting'): string
+    public function predict(string $prompt, string $lang = 'rw', string $type = 'greeting'): mixed
     {
-        $category = $this->promptModel->predict(\Rubix\ML\Datasets\Unlabeled::build([$prompt]))[0];
-
-        // If the category is a full row (contains '|||'), return it directly
-        if (str_contains($category, '|||')) {
-            return $category;
+        // Try to match as a legal question first
+        $results = $this->findSimilarLaws($prompt, 3);
+        if (!empty($results)) {
+            return [
+                'matches' => $results,
+                'message' => count($results) > 0 ? null : "Ihangane, ntabwo mbonye icyo amategeko abivugaho."
+            ];
         }
+        // Otherwise, try to match as a greeting
+        $greeting = $this->predictGreeting($prompt, $lang, $type);
+        return [
+            'greeting' => $greeting,
+            'message' => $greeting ? null : "Sorry, I couldn't understand your request."
+        ];
+    }
 
-        if ($category === 'greeting') {
-            return $this->predictGreeting($prompt, $lang, $type);
-        } elseif ($category === 'legal_question') {
-            return $this->answerLegalQuestion($prompt);
-        } elseif ($category === 'article') {
-            return $this->summarizeArticle($prompt);
+    /**
+     * Find similar laws using keyword matching and scoring.
+     * @param string $prompt
+     * @param int $topK
+     * @return array
+     */
+    protected function findSimilarLaws(string $prompt, int $topK = 3): array
+    {
+        if (empty($this->legalData) || empty($this->keywordIndex)) {
+            return [];
         }
-        return "Sorry, I couldn't understand your request.";
+        $similarities = [];
+        foreach ($this->legalData as $index => $law) {
+            $similarity = $this->calculateSimilarityScore($prompt, $law);
+            if ($similarity > 0) {
+                $similarities[] = [
+                    'similarity' => round($similarity * 100, 1),
+                    'law' => $law
+                ];
+            }
+        }
+        usort($similarities, function($a, $b) {
+            return $b['similarity'] <=> $a['similarity'];
+        });
+        return array_slice($similarities, 0, $topK);
+    }
+
+    /**
+     * Calculate similarity score using keyword matching.
+     */
+    protected function calculateSimilarityScore(string $query, array $lawData): float
+    {
+        $queryWords = $this->cleanAndTokenize(strtolower($query));
+        $lawText = strtolower($lawData['combined_text'] ?? '');
+        $score = 0.0;
+        $maxScore = 0.0;
+        foreach ($queryWords as $word) {
+            $maxScore += 1.0;
+            if (strpos($lawText, $word) !== false) {
+                $score += 1.0;
+            }
+        }
+        // Optionally: add more advanced scoring here
+        return $maxScore > 0 ? ($score / $maxScore) : 0.0;
+    }
+
+    /**
+     * Clean and tokenize text (remove stopwords, normalize)
+     */
+    protected function cleanAndTokenize(string $text): array
+    {
+        $kinyarwandaStopwords = [
+            'ni', 'na', 'ku', 'mu', 'nk', 'no', 'cyangwa', 'ariko', 'naho', 'none',
+            'kandi', 'rero', 'ubwo', 'uko', 'ubu', 'aha', 'aho', 'iyo', 'ese',
+            'nta', 'nti', 'nte', 'nto', 'ntu', 'ntw', 'aba', 'ari', 'hari',
+            'kuri', 'muri', 'buri', 'abantu', 'umuntu', 'ibintu', 'ikintu'
+        ];
+        $text = preg_replace('/[^a-zA-Z\s]/', '', $text);
+        $words = array_filter(explode(' ', $text));
+        $cleanWords = [];
+        foreach ($words as $word) {
+            $word = trim(strtolower($word));
+            if (strlen($word) > 2 && !in_array($word, $kinyarwandaStopwords)) {
+                $cleanWords[] = $word;
+            }
+        }
+        return $cleanWords;
     }
 
     /**
      * Predict greeting/response/followup in a specified language.
-     * @param string $greeting
-     * @param string $lang 'rw'|'en'|'fr'
-     * @param string $type 'greeting'|'response'|'followup'
      */
     public function predictGreeting(string $greeting, string $lang = 'rw', string $type = 'greeting'): string
     {
-        // Predict using the trained model (returns the closest match from all greetings/responses/followups)
-        $predicted = $this->greetingModel->predict(\Rubix\ML\Datasets\Unlabeled::build([$greeting]))[0];
-
-        // Try to extract the correct column from the CSV for the requested language/type
-        $csvPath = public_path('kinyarwanda_greetings.csv');
-        if (!file_exists($csvPath)) {
-            return $predicted;
+        // Fallback: just return the first greeting in the dataset
+        if (empty($this->greetingData)) {
+            return '';
         }
-        $handle = fopen($csvPath, 'r');
-        $header = fgetcsv($handle);
+        $header = $this->greetingData[0];
         $colMap = [
             'rw' => ['greeting' => 'greeting', 'response' => 'response', 'followup' => 'followup'],
             'en' => ['greeting' => 'greeting_en', 'response' => 'response_en', 'followup' => 'followup_en'],
@@ -70,85 +134,20 @@ class GreetingService
         ];
         $targetCol = $colMap[$lang][$type] ?? 'greeting';
         $colIdx = array_search($targetCol, $header);
-        $result = $predicted;
-        if ($colIdx !== false) {
-            // Find the row where any greeting/response/followup column matches the predicted value
-            while (($row = fgetcsv($handle)) !== false) {
-                if (in_array($predicted, $row, true)) {
-                    $result = $row[$colIdx] ?? $predicted;
-                    break;
+        $bestRow = null;
+        $maxScore = 0;
+        foreach (array_slice($this->greetingData, 1) as $row) {
+            foreach ($row as $cell) {
+                $score = similar_text(strtolower($greeting), strtolower($cell), $percent);
+                if ($percent > $maxScore) {
+                    $maxScore = $percent;
+                    $bestRow = $row;
                 }
             }
         }
-        fclose($handle);
-        return $result;
-    }
-
-    public function answerLegalQuestion(string $prompt): string
-    {
-        // Load dataset-all.csv and search for the most relevant description
-        $csvPath = public_path('dataset-all.csv');
-        if (!file_exists($csvPath)) {
-            return 'Legal dataset not found.';
+        if ($bestRow && $colIdx !== false) {
+            return $bestRow[$colIdx] ?? '';
         }
-
-        $handle = fopen($csvPath, 'r');
-        $header = fgetcsv($handle);
-        $bestScore = 0;
-        $bestRow = null;
-        while (($row = fgetcsv($handle)) !== false) {
-            $description = $row[3] ?? '';
-            similar_text(strtolower($prompt), strtolower($description), $percent);
-            if ($percent > $bestScore) {
-                $bestScore = $percent;
-                $bestRow = $row;
-            }
-        }
-        fclose($handle);
-
-        if ($bestRow && $bestScore > 30) { // threshold for relevance
-            $offence = $bestRow[0] ?? '';
-            $article = $bestRow[1] ?? '';
-            $category = $bestRow[2] ?? '';
-            $description = $bestRow[3] ?? '';
-            $punishment = $bestRow[4] ?? '';
-            return "Icyo amategeko avuga:\nIcyaha: $offence\nIngingo: $article\nKategori: $category\nUbusobanuro: $description\nIgihano: $punishment";
-        }
-        return 'Ihangane, ntabwo mbonye icyo amategeko abivugaho.';
-    }
-
-    public function summarizeArticle(string $prompt): string
-    {
-        // Load dataset-all.csv and search for the most relevant article by offence or article name
-        $csvPath = public_path('dataset-all.csv');
-        if (!file_exists($csvPath)) {
-            return 'Legal dataset not found.';
-        }
-
-        $handle = fopen($csvPath, 'r');
-        $header = fgetcsv($handle);
-        $bestScore = 0;
-        $bestRow = null;
-        while (($row = fgetcsv($handle)) !== false) {
-            $offence = $row[0] ?? '';
-            $article = $row[1] ?? '';
-            $searchString = strtolower($offence . ' ' . $article);
-            similar_text(strtolower($prompt), $searchString, $percent);
-            if ($percent > $bestScore) {
-                $bestScore = $percent;
-                $bestRow = $row;
-            }
-        }
-        fclose($handle);
-
-        if ($bestRow && $bestScore > 30) { // threshold for relevance
-            $offence = $bestRow[0] ?? '';
-            $article = $bestRow[1] ?? '';
-            $category = $bestRow[2] ?? '';
-            $description = $bestRow[3] ?? '';
-            $punishment = $bestRow[4] ?? '';
-            return "Inshamake:\nIcyaha: $offence\nIngingo: $article\nKategori: $category\nUbusobanuro: $description\nIgihano: $punishment";
-        }
-        return 'Ihangane, ntabwo mbonye ingingo ijyanye n\'icyo wabajije.';
+        return '';
     }
 }
