@@ -17,39 +17,63 @@
         @endif
     </head>
     <body class="bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1b1b18] flex items-center lg:justify-center flex-col">
-        <header class="w-full text-sm mb-6">
-            <div class="flex items-center justify-center mt-5 gap-2">
-            <img src="{{ asset('logo/logo.jpg') }}" alt="Kigali Web Artisans" class="h-12" />
-            <span>Kigali Web Artisans</span>
+        <header class="w-full text-sm mb-6 flex flex-row justify-between items-center lg:mb-12 lg:text-base bg-gradient-to-r from-blue-900 via-blue-700 to-blue-500 shadow-lg py-4 px-6">
+            <div class="flex justify-start items-center gap-3">
+                <img src="{{ asset('logo/logo.jpg') }}" alt="Kigali Web Artisans" class="h-14 rounded-full border-4 border-white shadow-md" />
+                <span class="text-white text-2xl font-extrabold tracking-tight drop-shadow">Kigali Web Artisans</span>
             </div>
+            <nav class="flex gap-6 items-center">
+                <a href="/teams" class="text-white hover:text-yellow-300 font-semibold transition">Our Team</a>
+                <a href="/careers" class="text-white hover:text-yellow-300 font-semibold transition">Careers</a>
+                <a href="/games" class="text-white hover:text-yellow-300 font-semibold transition">Gisenyi Studios</a>
+                <a href="#web-mobile" class="text-white hover:text-yellow-300 font-semibold transition">Web & Mobile</a>
+            </nav>
         </header>
         <div class="flex items-center justify-center w-full transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0">
-            <main class="flex w-full flex-col-reverse  lg:flex-col">
+            <main class="flex w-full flex-col-reverse lg:flex-col">
+                <section id="web-mobile">
+                    <livewire:products />
+                </section>
 
-                <livewire:products />
-                <div class="fixed bottom-8 left-8 z-50 text-white">
-                    <a href="teams" class="flex items-center gap-2">
-                        <span class="bg-blue-600 rounded-4xl p-5 flex items-center gap-2">
-                            <!-- Team icon (Heroicons users-solid) -->
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25v-1.5A2.25 2.25 0 016.75 16.5h10.5a2.25 2.25 0 012.25 2.25v1.5M6.75 6.75a3.75 3.75 0 107.5 0 3.75 3.75 0 00-7.5 0z" />
-                            </svg>
-                            Team
-                        </span>
-                    </a>
-                </div>
-                <livewire:contact />
+                <!-- Gisenyi Studios Section (Games & 3D) -->
+                <section class="w-full max-w-5xl mx-auto mt-12 mb-8 px-4" id="games">
+                    <h2 class="text-4xl font-extrabold text-blue-900 mb-4 text-center tracking-tight">Gisenyi Studios <span class="text-yellow-400">(A Mini Service of Kigali Web Artisans)</span></h2>
+                    <p class="text-lg text-gray-700 text-center mb-8">We foster innovation in real-time 3D for construction, health, animation, simulation, and games. Our games and 3D solutions are built under the Gisenyi Studios department, driving the future of digital Rwanda.</p>
+                    <div class="flex flex-wrap gap-8 justify-center items-stretch">
+                        <div class="flex flex-col w-72 bg-gradient-to-br from-purple-200 via-blue-100 to-yellow-100 rounded-3xl shadow-xl p-6">
+                            <img src="products/simulation.png" alt="3D Simulation" class="rounded-xl mb-4 mx-auto border-4 border-blue-200" style="width:180px; height:180px; object-fit:cover;" />
+                            <h3 class="text-xl font-bold mb-2 text-blue-900">3D Simulation & Animation</h3>
+                            <p class="text-blue-800 mb-4">Cutting-edge real-time 3D and simulation for education, construction, and entertainment.</p>
+                            <a href="https://youtu.be/xPTxwFbbbX4?si=SfLyt5YgVm2SVx0D" class="mt-auto text-blue-700 font-semibold hover:underline">See a sample</a>
+                        </div>
+                        <div class="flex flex-col w-72 bg-gradient-to-br from-yellow-200 via-blue-100 to-purple-100 rounded-3xl shadow-xl p-6">
+                            <h3 class="text-xl font-bold mb-2 text-blue-900">Game Development</h3>
+                            <p class="text-blue-800 mb-4">We build interactive games and gamified experiences for web, mobile, and desktop under Gisenyi Studios.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Our Team Section -->
+                <section class="w-full max-w-5xl mx-auto mt-12 mb-8 px-4" id="team">
+                    <h2 class="text-4xl font-extrabold text-blue-900 mb-4 text-center tracking-tight">Our Team</h2>
+                    <livewire:team />
+                </section>
+
+                <!-- Careers Section -->
+                <section class="w-full max-w-5xl mx-auto mt-12 mb-8 px-4" id="careers">
+                    <h2 class="text-4xl font-extrabold text-blue-900 mb-4 text-center tracking-tight">Careers</h2>
+                    <p class="mb-4 text-gray-700 text-center">Join our team of passionate developers, designers, and creators. See our <a href="/careers" class="text-blue-600 underline">current openings</a> and guidelines for data entry work.</p>
+                </section>
 
             </main>
         </div>
-
-        <footer class="w-full lg:max-w-4xl max-w-[335px] text-sm mt-6">
-            <p class="text-center">© {{ date('Y') }} Kigali Web Artisans</p>
+        <footer class="w-full  text-sm mt-6 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-500 text-white py-6 rounded-t-2xl shadow-lg">
+            <p class="text-center font-semibold">© {{ date('Y') }} Kigali Web Artisans</p>
             <p class="text-center">All rights reserved.</p>
             <p class="text-center">Head Office: Rubavu, Gisenyi</p>
             <div class="text-center">
-            <span class="text-center">Email: <a href="mailto:mmaudace@gmail.com" class="underline underline-offset-4">mmaudace@gmail.com</a></span>
-            <span class="text-center">Phone: <a href="tel:+250787652137" class="underline underline-offset-4">+250 788 123 456</a></span>
+                <span class="text-center">Email: <a href="mailto:mmaudace@gmail.com" class="underline underline-offset-4 text-yellow-300">mmaudace@gmail.com</a></span>
+                <span class="text-center ml-4">Phone: <a href="tel:+250787652137" class="underline underline-offset-4 text-yellow-300">+250 788 123 456</a></span>
             </div>
         </footer>
     </body>

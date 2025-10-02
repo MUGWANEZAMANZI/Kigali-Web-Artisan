@@ -18,7 +18,7 @@
     <img src="products/dorm_link.jpg" alt="Dorm Link" class="rounded-xl mb-4 mx-auto" style="width:180px; height:180px; object-fit:cover;" />
         <h1 class="text-xl font-bold mb-2 text-gray-800">Dorm Link</h1>
         <h2 class="text-gray-600 mb-4">This is an android app that enables students to find cheap dorms and hostels in Rwanda on Maps.</h2>
-        <a href="https://play.google.com/apps/internaltest/4700453856788841191" class="mt-auto text-blue-600 font-semibold hover:underline">Testing in Play Store</a>
+        <a href="https://play.google.com/store/apps/details?id=com.kigaliwebartisans.mbazaai" class="mt-auto text-blue-600 font-semibold hover:underline">Download</a>
     </div>
 
     <!-- Product Card: Site Pay -->
